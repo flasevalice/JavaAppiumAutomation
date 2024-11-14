@@ -62,7 +62,7 @@ public class FirstTest {
         waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='Object-oriented programming language']"), "Невозможно найти элемент", 20);
 //        WebElement titleElement = waitForElementPresent(By.xpath("//*[@resource-id='pcs']//*[@text='Java (programming language)']"), "Невозможно найти элемент", 40);
 //        String articleTitle = titleElement.getText();
-        assertElementHasText(By.xpath("//*[@resource-id='pcs']//*[@text='Java (programming language)']"), "Java (programming language)", "Элемент по данному локатору не содержит ожидаемый текст", 15);
+        assertElementHasText(By.xpath("//*[@resource-id='pcs']//*[@text='Java (programming language)']"), "Java (programming language)", "Элемент по данному локатору не содержит ожидаемый текст", 20);
         //Assert.assertEquals("Некорректный заголовок", "Java (programming language)", articleTitle);
 
     }
@@ -73,6 +73,17 @@ public class FirstTest {
         waitForElementAndClick(By.id("org.wikipedia:id/search_container"), "Невозможно найти элемент", 15);
         assertElementHasText(By.id("org.wikipedia:id/search_src_text"), "Search Wikipedia", "Элемент по данному локатору не содержит ожидаемый текст", 15);
     }
+
+    @Test
+    public void findTitlesAndCancelSearchTest() {
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Skip')]"), "Невозможно найти элемент", 15);
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"), "Невозможно найти элемент", 15);
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"), "Java", "Невозможно найти элемент", 15);
+        waitForElementPresent(By.id("org.wikipedia:id/search_results_list"), "Невозможно найти элемент", 15);
+        waitForElementAndClick(By.id("org.wikipedia:id/search_close_btn"),"Невозможно найти элемент", 15);
+        waitForElementNotPresent(By.id("org.wikipedia:id/search_results_list"), "Невозможно найти элемент", 15);
+    }
+
 
     private WebElement waitForElementPresent(By by, String err_msg, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
