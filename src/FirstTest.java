@@ -226,6 +226,18 @@ public class FirstTest {
         assertElementHasText(By.xpath("//*[@resource-id='pcs']//*[@text='Appium']"), "Appium", "Элемент по данному локатору не содержит ожидаемый текст", 20);
     }
 
+    @Test
+    public void assertElementPresent() {
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Skip')]"), "Невозможно найти элемент", 15);
+        //поиск первой
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"), "Невозможно найти элемент", 15);
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"), "Java", "Невозможно найти элемент", 15);
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='Object-oriented programming language']"), "Невозможно найти элемент", 20);
+        //проверка наличия тайтл
+        assertElementPresent(By.id("org.wikipedia:id/page_list_item_title"), "Cannot find title of article");
+    }
+
+
     //не работает из-за версии верстки, поэтому заменено отображением
     private String waitForElementAndGetAttribute(By by, String attribute, String err_msg, long timeoutInSeconds)
     {
@@ -243,6 +255,15 @@ public class FirstTest {
         driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
+
+    private void assertElementPresent(By by, String err_msg)
+    {
+        int amountOfTitles = getAmountOfElements(by);
+        if (amountOfTitles < 1) {
+            String defaultMessage = "An element '" + by.toString() + "' not present";
+            throw new AssertionError(defaultMessage + " " + err_msg);
+        }
+    }
 
     private void assertElementNotPresent(By by, String err_msg) {
         int amountOfElements = getAmountOfElements(by);
