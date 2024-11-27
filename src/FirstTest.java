@@ -191,8 +191,42 @@ public class FirstTest {
         waitForElementPresent(By.xpath(searchResultLocator), "Cannot find element after returning from background ", 15);
     }
 
+    @Test
+    public void saveTwoArticlesAndDeleteOneOfThemTest() {
+        waitForElementAndClick(By.xpath("//*[contains(@text, 'Skip')]"), "Невозможно найти элемент", 15);
+        //поиск первой
+        waitForElementAndClick(By.id("org.wikipedia:id/search_container"), "Невозможно найти элемент", 15);
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"), "Java", "Невозможно найти элемент", 15);
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='Object-oriented programming language']"), "Невозможно найти элемент", 20);
+        waitForElementPresent(By.xpath("//*[@resource-id='pcs']//*[@text='Java (programming language)']"), "Элемент по данному локатору не содержит ожидаемый текст", 20);
+        //сохранение первой
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_save'][@text='Save']"),"Невозможно найти кнопку Save",5);
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action'][@text='Add to list']"),"Невозможно найти элемент 'Add to list'",5);
+        // в новый список
+        waitForElementAndSendKeys(By.xpath("//*[@resource-id='org.wikipedia:id/text_input'][@text='Name of this list']"),"Новый список","Невозможно вести название списка",5);
+        waitForElementAndSendKeys(By.xpath("//*[@resource-id='org.wikipedia:id/secondary_text_input']" + "[@text='Description (optional)']"),"Описание списка","Невозможно вести описание списка",5);
+        waitForElementAndClick(By.xpath("//*[@resource-id='android:id/button1'][@text='OK']"),"Невозможно найти элемент - кнопку OK", 5);
+        //поиск второй
+        waitForElementAndClick(By.id("org.wikipedia:id/page_toolbar_button_search"), "Невозможно найти элемент", 30);
+        waitForElementAndSendKeys(By.id("org.wikipedia:id/search_src_text"), "Appium", "Невозможно найти элемент", 15);
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='Automation for Apps']"), "Невозможно найти элемент", 20);
+        waitForElementPresent(By.xpath("//*[@resource-id='pcs']//*[@text='Appium']"), "Элемент по данному локатору не содержит ожидаемый текст", 20);
+        //сохранение второй
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_save'][@text='Save']"),"Невозможно найти кнопку Save",5);
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action'][@text='Add to list']"),"Невозможно найти элемент 'Add to list'",5);
+        //в существующий список
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/item_title_container']"), "Невозможно добавление в существующий список", 10);
+        //просмотр списка
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/snackbar_action']" + "[@text='View list']"),"Невозможно найти элемент - кнопку 'VIEW LIST'",5);
+        //удаление одной из
+        swipeToTheLeftElement(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']" +"[@text='Java (programming language)']"),"Невозможно найти статью 'Java (programming language)' в списке 'Новый список'");
+        //вторая осталась
+        waitForElementAndClick(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']" +"[@text='Appium']"), "Элемент по данному локатору не содержит ожидаемый текст", 20);
+        //и заголовок
+        assertElementHasText(By.xpath("//*[@resource-id='pcs']//*[@text='Appium']"), "Appium", "Элемент по данному локатору не содержит ожидаемый текст", 20);
+    }
 
-    //не работает, поэтому заменено отображением
+    //не работает из-за версии верстки, поэтому заменено отображением
     private String waitForElementAndGetAttribute(By by, String attribute, String err_msg, long timeoutInSeconds)
     {
         WebElement element = waitForElementPresent(by, err_msg, timeoutInSeconds);
